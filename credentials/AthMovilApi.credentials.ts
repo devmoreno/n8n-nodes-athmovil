@@ -2,8 +2,6 @@ import {
 	IAuthenticateGeneric,
 	ICredentialType,
 	INodeProperties,
-	ICredentialTestRequest,
-	IHttpRequestMethods,
 } from 'n8n-workflow';
 
 export class AthMovilApi implements ICredentialType {
@@ -55,25 +53,7 @@ export class AthMovilApi implements ICredentialType {
 		},
 	};
 
-	test: ICredentialTestRequest = {
-		request: {
-			baseURL: 'https://payments.athmovil.com',
-			url: '/api/business-transaction/ecommerce/business/findPayment',
-			method: 'POST' as IHttpRequestMethods,
-			body: {
-				publicToken: '={{$credentials.publicToken}}',
-				ecommerceId: 'credential-test-dummy-id',
-			},
-		},
-		rules: [
-			{
-				type: 'responseSuccessBody',
-				properties: {
-					key: 'errorcode',
-					value: 'BTRA_0031',
-					message: 'Public token is valid! The error "EcommerceId does not exist" confirms the API accepted your credentials.',
-				},
-			},
-		],
-	};
+	// Note: Automatic credential testing is not available for ATH Móvil API
+	// The API requires valid transaction data and returns 409 status codes for test requests
+	// To verify your credentials, use the node with actual payment data or test in the ATH Móvil dashboard
 }

@@ -309,6 +309,38 @@ export class AthMovil implements INodeType {
 				required: true,
 				description: 'Authorization token from Create Payment response',
 			},
+
+			// Refund Payment fields
+			{
+				displayName: 'Reference Number',
+				name: 'referenceNumber',
+				type: 'string',
+				displayOptions: {
+					show: {
+						operation: ['refundPayment'],
+					},
+				},
+				default: '',
+				required: true,
+				description: 'Unique reference number for the refund transaction',
+			},
+			{
+				displayName: 'Amount',
+				name: 'refundAmount',
+				type: 'number',
+				displayOptions: {
+					show: {
+						operation: ['refundPayment'],
+					},
+				},
+				default: 0,
+				required: true,
+				description: 'Amount to refund',
+				typeOptions: {
+					numberPrecision: 2,
+					minValue: 0.01,
+				},
+			},
 		],
 	};
 
@@ -402,6 +434,8 @@ export class AthMovil implements INodeType {
 				} else if (operation === 'refundPayment') {
 					const ecommerceId = this.getNodeParameter('ecommerceId', i) as string;
 					const authToken = this.getNodeParameter('authToken', i) as string;
+					const referenceNumber = this.getNodeParameter('referenceNumber', i) as string;
+					const refundAmount = this.getNodeParameter('refundAmount', i) as number;
 
 					responseData = await this.helpers.request({
 						method: 'POST',
@@ -411,7 +445,10 @@ export class AthMovil implements INodeType {
 						},
 						body: {
 							publicToken: credentials.publicToken,
+							privateToken: credentials.privateToken,
 							ecommerceId,
+							referenceNumber,
+							amount: refundAmount,
 						},
 						json: true,
 					});
