@@ -6,3 +6,4 @@ dist
 .vscode
 *.log
 .env
+test-*.js

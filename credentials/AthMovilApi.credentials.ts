@@ -1,8 +1,9 @@
 import {
 	IAuthenticateGeneric,
-	ICredentialTestRequest,
 	ICredentialType,
 	INodeProperties,
+	ICredentialTestRequest,
+	IHttpRequestMethods,
 } from 'n8n-workflow';
 
 export class AthMovilApi implements ICredentialType {
@@ -58,11 +59,21 @@ export class AthMovilApi implements ICredentialType {
 		request: {
 			baseURL: 'https://payments.athmovil.com',
 			url: '/api/business-transaction/ecommerce/business/findPayment',
-			method: 'POST',
+			method: 'POST' as IHttpRequestMethods,
 			body: {
 				publicToken: '={{$credentials.publicToken}}',
-				ecommerceId: 'test-connection',
+				ecommerceId: 'credential-test-dummy-id',
 			},
 		},
+		rules: [
+			{
+				type: 'responseSuccessBody',
+				properties: {
+					key: 'errorcode',
+					value: 'BTRA_0031',
+					message: 'Public token is valid! The error "EcommerceId does not exist" confirms the API accepted your credentials.',
+				},
+			},
+		],
 	};
 }

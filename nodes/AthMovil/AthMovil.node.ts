@@ -5,8 +5,6 @@ import {
 	INodeTypeDescription,
 	IDataObject,
 	NodeOperationError,
-	ILoadOptionsFunctions,
-	INodePropertyOptions,
 } from 'n8n-workflow';
 
 export class AthMovil implements INodeType {
