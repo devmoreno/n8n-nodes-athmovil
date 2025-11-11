@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-ath-movil",
-  "version": "0.1.0",
+  "version": "0.3.1",
   "description": "n8n community node for ATH Móvil integration",
   "keywords": [
     "n8n-community-node-package",
@@ -10,14 +10,14 @@
     "puerto-rico"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/devmoreno/ATHMoviln8n",
+  "homepage": "https://github.com/devmoreno/n8n-nodes-athmovil",
   "author": {
     "name": "devmoreno",
     "email": "edwin.moreno@proranked.com"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devmoreno/ATHMoviln8n.git"
+    "url": "git+https://github.com/devmoreno/n8n-nodes-athmovil.git"
   },
   "main": "index.js",
   "scripts": {

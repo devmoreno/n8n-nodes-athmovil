@@ -5,6 +5,8 @@ import {
 	INodeTypeDescription,
 	IDataObject,
 	NodeOperationError,
+	ILoadOptionsFunctions,
+	INodePropertyOptions,
 } from 'n8n-workflow';
 
 export class AthMovil implements INodeType {
@@ -27,6 +29,21 @@ export class AthMovil implements INodeType {
 				required: true,
 			},
 		],
+		usableAsTool: true,
+		codex: {
+			categories: ['AI', 'Payment Processing'],
+			subcategories: {
+				'AI': ['Tools'],
+				'Payment Processing': ['Payment Gateways'],
+			},
+			resources: {
+				primaryDocumentation: [
+					{
+						url: 'https://github.com/evertec/ATHM-Payment-Button-API',
+					},
+				],
+			},
+		},
 		properties: [
 			{
 				displayName: 'Operation',
