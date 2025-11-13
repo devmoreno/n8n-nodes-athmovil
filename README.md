@@ -1,5 +1,7 @@
 # n8n-nodes-ath-movil
 
+[![Publish to npm](https://github.com/devmoreno/n8n-nodes-athmovil/actions/workflows/publish.yml/badge.svg)](https://github.com/devmoreno/n8n-nodes-athmovil/actions/workflows/publish.yml)
+
 This is an n8n community node package for integrating with ATH Móvil, Puerto Rico's popular mobile payment platform.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
