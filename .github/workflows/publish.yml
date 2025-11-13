@@ -53,6 +53,45 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
+      - name: Get version
+        if: steps.check-version.outputs.version_exists == 'false'
+        id: get-version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        if: steps.check-version.outputs.version_exists == 'false'
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get-version.outputs.tag }}
+          release_name: Release ${{ steps.get-version.outputs.tag }}
+          body: |
+            ## ATH Móvil n8n Node - Version ${{ steps.get-version.outputs.version }}
+
+            ### Installation
+            ```bash
+            npm install n8n-nodes-ath-movil@${{ steps.get-version.outputs.version }}
+            ```
+
+            Or install via n8n UI:
+            1. Go to Settings → Community Nodes
+            2. Click Install
+            3. Enter: `n8n-nodes-ath-movil`
+
+            ### What's Changed
+            See [CHANGELOG.md](https://github.com/devmoreno/n8n-nodes-athmovil/blob/main/CHANGELOG.md) for details.
+
+            ### Resources
+            - [npm package](https://www.npmjs.com/package/n8n-nodes-ath-movil)
+            - [Documentation](https://github.com/devmoreno/n8n-nodes-athmovil#readme)
+            - [ATH Móvil API](https://github.com/evertec/ATHM-Payment-Button-API)
+          draft: false
+          prerelease: false
+
       - name: Skip publish
         if: steps.check-version.outputs.version_exists == 'true'
         run: |
