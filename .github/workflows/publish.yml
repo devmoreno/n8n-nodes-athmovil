@@ -15,6 +15,10 @@ jobs:
     # Only run on push to main, not on PRs
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
+    permissions:
+      contents: write
+      packages: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -63,34 +67,30 @@ jobs:
 
       - name: Create GitHub Release
         if: steps.check-version.outputs.version_exists == 'false'
-        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get-version.outputs.tag }}
-          release_name: Release ${{ steps.get-version.outputs.tag }}
-          body: |
-            ## ATH Móvil n8n Node - Version ${{ steps.get-version.outputs.version }}
+        run: |
+          gh release create ${{ steps.get-version.outputs.tag }} \
+            --title "Release ${{ steps.get-version.outputs.tag }}" \
+            --notes "## ATH Móvil n8n Node - Version ${{ steps.get-version.outputs.version }}
 
-            ### Installation
-            ```bash
-            npm install n8n-nodes-ath-movil@${{ steps.get-version.outputs.version }}
-            ```
+          ### Installation
+          \`\`\`bash
+          npm install n8n-nodes-ath-movil@${{ steps.get-version.outputs.version }}
+          \`\`\`
 
-            Or install via n8n UI:
-            1. Go to Settings → Community Nodes
-            2. Click Install
-            3. Enter: `n8n-nodes-ath-movil`
+          Or install via n8n UI:
+          1. Go to Settings → Community Nodes
+          2. Click Install
+          3. Enter: \`n8n-nodes-ath-movil\`
 
-            ### What's Changed
-            See [CHANGELOG.md](https://github.com/devmoreno/n8n-nodes-athmovil/blob/main/CHANGELOG.md) for details.
+          ### What's Changed
+          See [CHANGELOG.md](https://github.com/devmoreno/n8n-nodes-athmovil/blob/main/CHANGELOG.md) for details.
 
-            ### Resources
-            - [npm package](https://www.npmjs.com/package/n8n-nodes-ath-movil)
-            - [Documentation](https://github.com/devmoreno/n8n-nodes-athmovil#readme)
-            - [ATH Móvil API](https://github.com/evertec/ATHM-Payment-Button-API)
-          draft: false
-          prerelease: false
+          ### Resources
+          - [npm package](https://www.npmjs.com/package/n8n-nodes-ath-movil)
+          - [Documentation](https://github.com/devmoreno/n8n-nodes-athmovil#readme)
+          - [ATH Móvil API](https://github.com/evertec/ATHM-Payment-Button-API)"
 
       - name: Skip publish
         if: steps.check-version.outputs.version_exists == 'true'
