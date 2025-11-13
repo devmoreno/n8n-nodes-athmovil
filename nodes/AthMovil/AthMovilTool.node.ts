@@ -9,7 +9,7 @@ import {
 
 export class AthMovilTool implements INodeType {
 	description: INodeTypeDescription = {
-		displayName: 'ATH Móvil',
+		displayName: 'ATH Móvil Tool',
 		name: 'athMovilTool',
 		icon: 'file:icon.png',
 		group: ['transform'],
@@ -17,7 +17,7 @@ export class AthMovilTool implements INodeType {
 		subtitle: '={{$parameter["operation"]}}',
 		description: 'Process payments, refunds, and transactions using ATH Móvil, Puerto Rico\'s mobile payment platform',
 		defaults: {
-			name: 'ATH Móvil',
+			name: 'ATH Móvil Tool',
 		},
 		inputs: ['main'],
 		outputs: ['main'],
