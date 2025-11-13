@@ -15,7 +15,7 @@ export class AthMovil implements INodeType {
 		group: ['transform'],
 		version: 1,
 		subtitle: '={{$parameter["operation"]}}',
-		description: 'Interact with ATH Móvil Payment Button API',
+		description: 'Process payments, refunds, and transactions using ATH Móvil, Puerto Rico\'s mobile payment platform',
 		defaults: {
 			name: 'ATH Móvil',
 		},
@@ -28,11 +28,19 @@ export class AthMovil implements INodeType {
 			},
 		],
 		usableAsTool: true,
+		requestDefaults: {
+			baseURL: 'https://payments.athmovil.com',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+		},
 		codex: {
-			categories: ['AI', 'Payment Processing'],
+			categories: ['AI', 'Payment Processing', 'Financial Services'],
 			subcategories: {
-				'AI': ['Tools'],
+				'AI': ['Tools', 'Actions'],
 				'Payment Processing': ['Payment Gateways'],
+				'Financial Services': ['Payments', 'Refunds'],
 			},
 			resources: {
 				primaryDocumentation: [
@@ -41,6 +49,7 @@ export class AthMovil implements INodeType {
 					},
 				],
 			},
+			alias: ['payment', 'refund', 'transaction', 'athmovil', 'ath'],
 		},
 		properties: [
 			{
@@ -48,45 +57,82 @@ export class AthMovil implements INodeType {
 				name: 'operation',
 				type: 'options',
 				noDataExpression: true,
+				default: 'createPayment',
+				description: 'The operation to perform',
 				options: [
 					{
 						name: 'Create Payment',
 						value: 'createPayment',
-						description: 'Create a new payment transaction',
-						action: 'Create a payment',
+						description: 'Create a new payment transaction with ATH Móvil. Returns ecommerceId and auth_token for future operations.',
+						action: 'Create a payment transaction',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/payment',
+							},
+						},
 					},
 					{
 						name: 'Find Payment',
 						value: 'findPayment',
-						description: 'Get payment transaction details',
-						action: 'Find a payment',
+						description: 'Retrieve payment transaction details and status (OPEN, CONFIRM, COMPLETED, CANCEL) using ecommerceId',
+						action: 'Get payment status and details',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/business/findPayment',
+							},
+						},
 					},
 					{
 						name: 'Authorize Payment',
 						value: 'authorizePayment',
-						description: 'Authorize a confirmed payment',
-						action: 'Authorize a payment',
+						description: 'Process and complete a payment that was confirmed by the customer. Requires auth_token from create payment.',
+						action: 'Authorize and process a confirmed payment',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/authorization',
+							},
+						},
 					},
 					{
 						name: 'Update Phone Number',
 						value: 'updatePhoneNumber',
-						description: 'Update phone number for a transaction',
-						action: 'Update phone number',
+						description: 'Update the customer phone number associated with an existing payment transaction',
+						action: 'Update transaction phone number',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/payment/updatePhoneNumber',
+							},
+						},
 					},
 					{
 						name: 'Refund Payment',
 						value: 'refundPayment',
-						description: 'Refund a completed payment',
-						action: 'Refund a payment',
+						description: 'Issue a full or partial refund for a completed payment transaction. Requires auth_token, reference number, and amount.',
+						action: 'Process a payment refund',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/refund',
+							},
+						},
 					},
 					{
 						name: 'Cancel Payment',
 						value: 'cancelPayment',
-						description: 'Cancel a pending payment',
-						action: 'Cancel a payment',
+						description: 'Cancel a pending payment transaction that has not been completed. Cannot cancel completed payments.',
+						action: 'Cancel a pending payment',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/cancel',
+							},
+						},
 					},
 				],
-				default: 'createPayment',
 			},
 
 			// Create Payment fields
