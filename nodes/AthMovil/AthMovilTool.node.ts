@@ -7,10 +7,10 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
-export class AthMovil implements INodeType {
+export class AthMovilTool implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'ATH Móvil',
-		name: 'athMovil',
+		name: 'athMovilTool',
 		icon: 'file:icon.png',
 		group: ['transform'],
 		version: 1,
@@ -27,6 +27,30 @@ export class AthMovil implements INodeType {
 				required: true,
 			},
 		],
+		usableAsTool: true,
+		requestDefaults: {
+			baseURL: 'https://payments.athmovil.com',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json',
+			},
+		},
+		codex: {
+			categories: ['AI', 'Payment Processing', 'Financial Services'],
+			subcategories: {
+				'AI': ['Tools', 'Actions'],
+				'Payment Processing': ['Payment Gateways'],
+				'Financial Services': ['Payments', 'Refunds'],
+			},
+			resources: {
+				primaryDocumentation: [
+					{
+						url: 'https://github.com/evertec/ATHM-Payment-Button-API',
+					},
+				],
+			},
+			alias: ['payment', 'refund', 'transaction', 'athmovil', 'ath'],
+		},
 		properties: [
 			{
 				displayName: 'Operation',
@@ -41,36 +65,72 @@ export class AthMovil implements INodeType {
 						value: 'createPayment',
 						description: 'Create a new payment transaction with ATH Móvil. Returns ecommerceId and auth_token for future operations.',
 						action: 'Create a payment transaction',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/payment',
+							},
+						},
 					},
 					{
 						name: 'Find Payment',
 						value: 'findPayment',
 						description: 'Retrieve payment transaction details and status (OPEN, CONFIRM, COMPLETED, CANCEL) using ecommerceId',
 						action: 'Get payment status and details',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/business/findPayment',
+							},
+						},
 					},
 					{
 						name: 'Authorize Payment',
 						value: 'authorizePayment',
 						description: 'Process and complete a payment that was confirmed by the customer. Requires auth_token from create payment.',
 						action: 'Authorize and process a confirmed payment',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/authorization',
+							},
+						},
 					},
 					{
 						name: 'Update Phone Number',
 						value: 'updatePhoneNumber',
 						description: 'Update the customer phone number associated with an existing payment transaction',
 						action: 'Update transaction phone number',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/payment/updatePhoneNumber',
+							},
+						},
 					},
 					{
 						name: 'Refund Payment',
 						value: 'refundPayment',
 						description: 'Issue a full or partial refund for a completed payment transaction. Requires auth_token, reference number, and amount.',
 						action: 'Process a payment refund',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/refund',
+							},
+						},
 					},
 					{
 						name: 'Cancel Payment',
 						value: 'cancelPayment',
 						description: 'Cancel a pending payment transaction that has not been completed. Cannot cancel completed payments.',
 						action: 'Cancel a pending payment',
+						routing: {
+							request: {
+								method: 'POST',
+								url: '/api/business-transaction/ecommerce/cancel',
+							},
+						},
 					},
 				],
 			},
