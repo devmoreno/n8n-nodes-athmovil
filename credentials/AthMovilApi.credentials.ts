@@ -28,19 +28,6 @@ export class AthMovilApi implements ICredentialType {
 			required: true,
 			description: 'The private token from your ATH Business account',
 		},
-		{
-			displayName: 'Environment',
-			name: 'environment',
-			type: 'options',
-			options: [
-				{
-					name: 'Production',
-					value: 'production',
-				},
-			],
-			default: 'production',
-			description: 'ATH Móvil environment to use',
-		},
 	];
 
 	authenticate: IAuthenticateGeneric = {
