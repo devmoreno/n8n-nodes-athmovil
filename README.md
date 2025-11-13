@@ -5,7 +5,7 @@ This is an n8n community node package for integrating with ATH Móvil, Puerto Ri
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/reference/license/) workflow automation platform.
 
 ## Sponsorship
-This project is maintained by [ProRanked](https://github.com/ProRanked). If you find this node useful and would like to support its development, consider sponsoring us on [GitHub Sponsors](https://github.com/sponsors/ProRanked).
+This project is maintained by [devmoreno](https://github.com/devmoreno). If you find this node useful and would like to support its development, consider sponsoring us on [GitHub Sponsors](https://github.com/sponsors/devmoreno).
 
 ## Installation
 
