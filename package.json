@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-ath-movil",
-  "version": "0.8.8",
+  "version": "0.9.0",
   "description": "n8n community node for ATH Móvil integration",
   "keywords": [
     "n8n-community-node-package",

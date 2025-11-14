@@ -7,6 +7,8 @@ import {
 	NodeOperationError,
 } from 'n8n-workflow';
 
+import { parseAthMovilError } from './ErrorHandler';
+
 export class AthMovilTool implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'ATH Móvil Tool',
@@ -518,23 +520,23 @@ export class AthMovilTool implements INodeType {
 				);
 				returnData.push(...executionData);
 			} catch (error) {
-				const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-				const errorDescription = error instanceof Error && 'description' in error
-					? (error as any).description
-					: undefined;
+				const parsedError = parseAthMovilError(error);
 
 				if (this.continueOnFail()) {
 					returnData.push({
 						json: {
-							error: errorMessage,
+							error: parsedError.message,
+							errorCode: parsedError.errorCode,
+							...parsedError.details,
 						},
 						pairedItem: { item: i },
 					});
 					continue;
 				}
-				throw new NodeOperationError(this.getNode(), error as Error, {
+
+				throw new NodeOperationError(this.getNode(), parsedError.message, {
 					itemIndex: i,
-					description: errorDescription,
+					description: parsedError.description,
 				});
 			}
 		}
